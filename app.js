@@ -1,13 +1,24 @@
 var createError = require('http-errors');
 var express = require('express');
+//require in mongoose
+const mongoose = require('mongoose');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
+//setup default mongoose connection.
+const mongoDB =
+  'mongodb+srv://admin:password2@locallib-dev-zh01u.mongodb.net/test?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, { useNewUrlParser: true });
 var app = express();
+
+//get the default connection
+const db = mongoose.connection;
+
+//bind connection to error event to get connection errors
+db.on('error', console.error.bind(console, 'MongoDB connect error:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
